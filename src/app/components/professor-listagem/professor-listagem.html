@@ -1,0 +1,55 @@
+<main class="col p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Professores</h1>
+        <a routerLink="/professores/novo" class="btn btn-primary">Novo professor</a>
+    </div>
+
+    <table class="table table-striped" style="font-size: 0.875rem;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Status</th>
+                <th>Salário</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (professor of professores(); track professor.id) {
+            <tr>
+                <td>{{ professor.id }}</td>
+                <td>{{ professor.name }}</td>
+                <td>{{ professor.phoneNumber }}</td>
+                <td>{{ professor.emailAddress }}</td>
+                <td>
+                    <!-- Badge colorida opcional baseada no status -->
+                    <span class="badge" [class.bg-success]="professor.status === 'ACTIVE'"
+                        [class.bg-danger]="professor.status === 'DISABLE'">
+                        {{ professor.status }}
+                    </span>
+                </td>
+                <!-- Formata o salário como moeda brasileira (R$) -->
+                <td>{{ professor.salary | currency:'BRL':'symbol':'1.2-2' }}</td>
+                <td class="text-center">
+                    <a [routerLink]="['/professores/editar', professor.id]"
+                        class="btn btn-sm btn-outline-primary py-0 px-2 me-1">
+                        Editar
+                    </a>
+                    @if (professor.status === 'ACTIVE') {
+                    <!-- Se o aluno está ativo, permite fazer o delete lógico (Desativar) -->
+                    <button class="btn btn-sm btn-outline-danger py-0 px-2" (click)="deletarLogico(professor.id!)">
+                        Desativar
+                    </button>
+                    }
+                </td>
+            </tr>
+            } @empty {
+            <tr>
+                <td colspan="6" class="text-center text-muted py-3">Nenhum professor cadastrado.</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</main>

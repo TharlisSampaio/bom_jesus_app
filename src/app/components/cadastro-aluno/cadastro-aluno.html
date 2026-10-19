@@ -1,0 +1,85 @@
+<!-- 🌟 Título Dinâmico: Muda conforme o estado do formulário -->
+@if (isEdicao) {
+  <h1 class="h4 mb-4">Editar aluno</h1>
+} @else {
+  <h1 class="h4 mb-4">Novo aluno</h1>
+}
+
+<form class="col-md-5 col-lg-4" [formGroup]="form" (ngSubmit)="salvar()" style="font-size: 0.875rem;">
+  
+  <!-- Campo Nome -->
+  <div class="mb-2">
+    <label class="form-label mb-1">Nome</label>
+    <input class="form-control form-control-sm" formControlName="name"
+           [class.is-invalid]="form.controls.name.touched && form.controls.name.invalid"/>
+    <div class="invalid-feedback" style="font-size: 0.775rem;">Informe o nome (mínimo 3 letras).</div>
+  </div>
+
+  <!-- Campo Telefone -->
+  <div class="mb-2">
+    <label class="form-label mb-1">Telefone</label>
+    <input class="form-control form-control-sm" formControlName="phoneNumber"
+           [class.is-invalid]="form.controls.phoneNumber.touched && form.controls.phoneNumber.invalid"/>
+    <div class="invalid-feedback" style="font-size: 0.775rem;">Informe o telefone.</div>
+  </div>
+
+  <!-- Campo E-mail -->
+  <div class="mb-2">
+    <label class="form-label mb-1">E-mail</label>
+    <input type="email" class="form-control form-control-sm" formControlName="emailAddress"
+           [class.is-invalid]="form.controls.emailAddress.touched && form.controls.emailAddress.invalid" />
+    <div class="invalid-feedback" style="font-size: 0.775rem;">Informe um e-mail válido.</div>
+  </div>
+
+  <!-- Campo Matrícula -->
+  <div class="mb-3">
+    <label class="form-label mb-1">Matrícula</label>
+    <input class="form-control form-control-sm" formControlName="studentNumber"
+           [class.is-invalid]="form.controls.studentNumber.touched && form.controls.studentNumber.invalid" />
+    <div class="invalid-feedback" style="font-size: 0.775rem;">Informe a matrícula.</div>
+  </div>
+
+  <hr class="my-3">
+  <h6 class="mb-2 fw-bold">Endereço</h6>
+  
+  <!-- Bloco de Endereço vinculado ao FormArray -->
+  <div formArrayName="address">
+    @for (control of addressControls; track $index) {
+      <div [formGroupName]="$index" class="p-2 mb-3 border rounded bg-light">
+        
+        <!-- Campo Rua -->
+        <div class="mb-2">
+          <label class="form-label mb-1">Rua</label>
+          <input class="form-control form-control-sm" formControlName="street" 
+                 [class.is-invalid]="control.get('street')?.touched && control.get('street')?.invalid"/>
+        </div>
+        
+        <!-- 🌟 RESTAURADO: Grid contendo Cidade, UF e CEP para os dados aparecerem -->
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label mb-1">Cidade</label>
+            <input class="form-control form-control-sm" formControlName="city" 
+                   [class.is-invalid]="control.get('city')?.touched && control.get('city')?.invalid"/>
+          </div>
+          <div class="col-md-2 mb-2">
+            <label class="form-label mb-1">UF</label>
+            <input class="form-control form-control-sm" formControlName="state" max-length="2" 
+                   [class.is-invalid]="control.get('state')?.touched && control.get('state')?.invalid"/>
+          </div>
+          <div class="col-md-4 mb-2">
+            <label class="form-label mb-1">CEP</label>
+            <input class="form-control form-control-sm" formControlName="zipCode" 
+                   [class.is-invalid]="control.get('zipCode')?.touched && control.get('zipCode')?.invalid"/>
+          </div>
+        </div>
+
+      </div>
+    }
+  </div>
+
+  <!-- Botões compactos com btn-sm -->
+  <div class="mt-3">
+    <button type="submit" class="btn btn-sm btn-primary me-2" [disabled]="form.invalid">Salvar</button>
+    <a routerLink="/alunos" class="btn btn-sm btn-outline-secondary">Cancelar</a>
+  </div>
+</form>
